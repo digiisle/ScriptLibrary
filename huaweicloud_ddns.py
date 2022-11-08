@@ -50,6 +50,8 @@ def compare_public_ip():
     else:
         # 调用发送邮件函数
         setIp(public_ip)
+        # 存储本次更新的ip用于比较
+        save_public_ip(public_ip)
 
 
 def setIp(public_ip):
@@ -104,7 +106,6 @@ def setIp(public_ip):
         return
 
     # 更新解析
-
     data = {
         "name": "yogknight.top.",
         "description": "Automation scripts to update",
@@ -115,11 +116,10 @@ def setIp(public_ip):
         ]
     }
     res = requests.put(url=domainUrl, data=json.dumps(data), headers=headers)
-    #print(res.text)
-    # 存储本次更新的ip用于比较
-    save_public_ip(public_ip)
+    # print(res.text)
     #print(time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime()), 'ip已更新', public_ip)
-    Content=time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())+' '+'域名'+domain+'的DNS解析已更新。'+'\r'+'更新后的IP地址为：'+public_ip+'\r'+res.text
+    Content = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())+' ' + \
+        '域名'+domain+'的DNS解析已更新。'+'\r'+'更新后的IP地址为：'+public_ip+'\r'+res.text
     # 调用发送邮件函数
     send_email(Content)
 
