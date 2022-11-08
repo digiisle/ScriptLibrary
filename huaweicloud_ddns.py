@@ -1,13 +1,13 @@
 # coding = utf-8
 import json
 import time
-import os
 import smtplib
 from email.mime.text import MIMEText
 import linecache
 from urllib.request import urlopen
 from json import load
 import requests
+from pathlib import Path
 
 # ddns解析域名
 domain = 'yogknight.top'
@@ -48,10 +48,8 @@ def compare_public_ip():
     if old_public_ip.strip() == public_ip.strip():
         pass
     else:
-        # 调用发送邮件函数
+        # 执行更新
         setIp(public_ip)
-        # 存储本次更新的ip用于比较
-        save_public_ip(public_ip)
 
 
 def setIp(public_ip):
@@ -122,6 +120,8 @@ def setIp(public_ip):
         '域名'+domain+'的DNS解析已更新。'+'\r'+'更新后的IP地址为：'+public_ip+'\r'+res.text
     # 调用发送邮件函数
     send_email(Content)
+    # 存储本次更新的ip用于比较
+    save_public_ip(public_ip)
 
 
 def send_email(Content):
@@ -160,13 +160,7 @@ if __name__ == "__main__":
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE'
     }
     try:
-        # 创建ip存储文件
-        try:
-            f = open(os.path.join(os.getcwd(), '/opt/scriptlibrary/huaweicloud_ddns.log'),
-                     'r', encoding='utf-8')
-        except Exception as result:
-            f = open(os.path.join(os.getcwd(), '/opt/scriptlibrary/huaweicloud_ddns.log'),
-                     'w+', encoding='utf-8')
+        # 对比两次获取到的结果
         compare_public_ip()
     except Exception as result:
         print(result)

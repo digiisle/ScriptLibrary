@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 import linecache
 from urllib.request import urlopen
 from json import load
-import os
+from pathlib import Path
 
 
 def send_email(new_public_ip, old_public_ip):
@@ -59,13 +59,6 @@ def compare_public_ip():
 
 if __name__ == "__main__":
     try:
-        # 创建ip存储文件
-        try:
-            f = open(os.path.join(os.getcwd(), '/opt/scriptlibrary/ipChangeMonitoring.log'),
-                     'r', encoding='utf-8')
-        except Exception as result:
-            f = open(os.path.join(os.getcwd(), '/opt/scriptlibrary/ipChangeMonitoring.log'),
-                     'w+', encoding='utf-8')
         # 对比两次获取到的结果
         compare_public_ip()
     except Exception as result:
