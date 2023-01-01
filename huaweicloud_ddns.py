@@ -1,13 +1,14 @@
 # coding = utf-8
 import json
-import time
-import smtplib
-from email.mime.text import MIMEText
 import linecache
-from urllib.request import urlopen
+import smtplib
+import ssl
+import time
+from email.mime.text import MIMEText
 from json import load
+from urllib.request import urlopen
+
 import requests
-from pathlib import Path
 
 # ddns解析域名
 domain = 'yogknight.top'
@@ -29,7 +30,8 @@ def save_public_ip(public_ip):
     保存获取到的公网IP
     """
     # 实时获取公网IP
-    public_ip = load(urlopen('https://ipv6.jsonip.com'))['ip']
+    ssl._create_default_https_context = ssl._create_unverified_context
+    public_ip = load(urlopen('https://api.erickqian.top/getip/'))['ip']
     file = open("/opt/scriptlibrary/huaweicloud_ddns.log", 'w')
     file.write(public_ip)
     file.close()
@@ -44,7 +46,8 @@ def compare_public_ip():
     filename = '/opt/scriptlibrary/huaweicloud_ddns.log'
     old_public_ip = linecache.getline(filename, 1)
     # 实时获取公网IP
-    public_ip = load(urlopen('https://ipv6.jsonip.com'))['ip']
+    ssl._create_default_https_context = ssl._create_unverified_context
+    public_ip = load(urlopen('https://api.erickqian.top/getip/'))['ip']
     if old_public_ip.strip() == public_ip.strip():
         pass
     else:

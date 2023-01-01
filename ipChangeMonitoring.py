@@ -1,9 +1,8 @@
+import linecache
 import smtplib
 from email.mime.text import MIMEText
-import linecache
-from urllib.request import urlopen
 from json import load
-from pathlib import Path
+from urllib.request import urlopen
 
 
 def send_email(new_public_ip, old_public_ip):
@@ -41,7 +40,8 @@ def compare_public_ip():
     与上一次执行保存的公网IP对比
     """
     # 实时获取公网IP
-    public_ip = load(urlopen('https://ipv6.jsonip.com'))['ip']
+
+    public_ip = load(urlopen('https://api.erickqian.top/getip/'))['ip']
     # 读取上一次执行保存的公网IP
     filename = '/opt/scriptlibrary/ipChangeMonitoring.log'
     old_public_ip = linecache.getline(filename, 1)
@@ -51,7 +51,7 @@ def compare_public_ip():
         # 调用发送邮件函数
         send_email(public_ip, old_public_ip)
         # 实时获取公网IP
-        public_ip = load(urlopen('https://ipv6.jsonip.com'))['ip']
+        public_ip = load(urlopen('https://api.erickqian.top/getip/'))['ip']
         file = open("/opt/scriptlibrary/ipChangeMonitoring.log", 'w')
         file.write(public_ip)
         file.close()
