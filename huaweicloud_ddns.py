@@ -23,9 +23,6 @@ def save_public_ip(public_ip):
     获取公网地址
     保存获取到的公网IP
     """
-    # 实时获取公网IP
-    ssl._create_default_https_context = ssl._create_unverified_context
-    public_ip = load(urlopen('https://api.erickqian.top/getip/'))['ip']
     file = open("/opt/scriptlibrary/huaweicloud_ddns.log", 'w')
     file.write(public_ip)
     file.close()
