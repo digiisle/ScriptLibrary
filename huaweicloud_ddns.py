@@ -1,14 +1,8 @@
 # coding = utf-8
-import json
-import linecache
-import smtplib
-import ssl
-import time
+import json,linecache,smtplib,ssl,time,requests
 from email.mime.text import MIMEText
 from json import load
 from urllib.request import urlopen
-
-import requests
 
 # ddns解析域名
 domain = 'yogknight.top'
