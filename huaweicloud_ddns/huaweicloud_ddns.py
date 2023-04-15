@@ -1,21 +1,27 @@
 # coding = utf-8
-import json,linecache,smtplib,ssl,time,requests
+import json
+import linecache
+import smtplib
+import os
+import re
+import time
+import requests
 from email.mime.text import MIMEText
 from json import load
 from urllib.request import urlopen
 
 # ddns解析域名
-domain = 'yogknight.top'
+domain = 'xxx'
 # 华为云账号
-name = 'yogknight'
+name = 'xxx'
 # 华为云密码
-password = 'xxxxxxxxxxxxxxxxxxxxxx'
+password = 'xxx'
 # 进入管理控制台\我的凭证 选择一个项目名称
 scopeName = 'cn-southwest-2'
 # 进入https://support.huaweicloud.com/api-dns/dns_api_62002.html查看获取zoneid
-zone_id = 'xxxxxxxxxxxxxxxxxxxxxx'
+zone_id = 'xxx'
 # 首次运行不填写 运行一次后会在在控制台打印出值
-recordset_id = 'xxxxxxxxxxxxxxxxxxxxxx'
+recordset_id = ''
 
 
 def save_public_ip(public_ip):
@@ -23,10 +29,15 @@ def save_public_ip(public_ip):
     获取公网地址
     保存获取到的公网IP
     """
-    file = open("/opt/scriptlibrary/huaweicloud_ddns.log", 'w')
+    file = open("./huaweicloud_ddns.log", 'w')
     file.write(public_ip)
     file.close()
 
+def getIPv6Address():
+    getIPV6 = os.popen("ip addr show")
+    output = str(getIPV6.read())
+    result = re.findall(r"(([a-f0-9]{1,4}:){7}[a-f0-9]{1,4})", output, re.I)
+    return result[0][0]
 
 def compare_public_ip():
     """
@@ -34,11 +45,10 @@ def compare_public_ip():
     与实时获取的公网IP对比
     """
     # 读取上一次执行后保存的公网IP
-    filename = '/opt/scriptlibrary/huaweicloud_ddns.log'
+    filename = './huaweicloud_ddns.log'
     old_public_ip = linecache.getline(filename, 1)
     # 实时获取公网IP
-    ssl._create_default_https_context = ssl._create_unverified_context
-    public_ip = load(urlopen('https://api.erickqian.top/getip/'))['ip']
+    public_ip = getIPv6Address()
     if old_public_ip.strip() == public_ip.strip():
         pass
     else:
@@ -97,10 +107,10 @@ def setIp(public_ip):
                   'recordsets'][0]['id'], '请写入recordset_id字段中')
         return
 
-    # 更新解析
+    # 更新解析,name为需要更新解析的域名
     data = {
-        "name": "yogknight.top.",
-        "description": "Automation scripts to update",
+        "name": "xxx",
+        "description": "Automation scripts to update by PC-Arch",
         "type": "AAAA",
         "ttl": 3600,
         "records": [
@@ -109,7 +119,7 @@ def setIp(public_ip):
     }
     res = requests.put(url=domainUrl, data=json.dumps(data), headers=headers)
     # print(res.text)
-    #print(time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime()), 'ip已更新', public_ip)
+    # print(time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime()), 'ip已更新', public_ip)
     Content = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())+' ' + \
         '域名'+domain+'的DNS解析已更新。'+'\r'+'更新后的IP地址为：'+public_ip+'\r'+res.text
     # 调用发送邮件函数
@@ -122,7 +132,7 @@ def send_email(Content):
     """发送邮件"""
     mail_host = 'smtp.qq.com'  # 邮箱服务器
     mail_user = 'xxx@qq.com'  # 用户名
-    mail_auth = 'xxxxxxxxxxxxxxxxxxxxxx'  # 授权码
+    mail_auth = 'xxx'  # 授权码
     sender = 'xxx@qq.com'  # 邮件发送方邮箱
     # 邮件接收方邮箱地址，注意需要[]包裹，可以写多个邮件地址进行群发
     receivers = ['xxx@outlook.com']
