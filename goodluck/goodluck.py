@@ -3,7 +3,7 @@ import random
 My_Ball = []
 while True:
     # 生成一位随机数
-    Data = random.randint(1, 34)
+    Data = random.randint(1, 33)
 
     # 避免重复
     if Data not in My_Ball:
@@ -16,6 +16,6 @@ while True:
 
 # 生成蓝球
 My_Ball.sort()
-Blue_Ball = random.randint(1, 17)
+Blue_Ball = random.randint(1, 16)
 My_Ball.append(Blue_Ball)
 print("本次号码:", My_Ball)
