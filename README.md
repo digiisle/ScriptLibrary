@@ -58,6 +58,3 @@ def read_old_public_ip():
 启动定时器`systemctl start ipChangeMonitoring.timer`  
 设置为开机自启`systemctl enable ipChangeMonitoring.timer`  
 查看所有已启用的定时器`systemctl list-timers`
-
-# LICENSE
-[licese file](https://github.com/ErickQian/ipChangeMonitoring/blob/master/LICENSE)
