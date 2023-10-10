@@ -14,7 +14,7 @@ newData = []
 for dataInfo in os.listdir('D:\\FunctionalTool\\MyScripts\\Python_CSV\\File'):
     dataFile = os.path.join(filePath, dataInfo)
     print(dataFile)
-    data = pd.read_csv(dataFile,encoding="gbk")
+    data = pd.read_excel(dataFile)
     data.head(2)
 
     # 删除不需要的列
