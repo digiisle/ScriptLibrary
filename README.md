@@ -1,10 +1,10 @@
 # ScriptLibrary
 常用脚本集，不定期更新。
 
-## huaweicloud_ddns.py
+## huaweicloud_ddns
 监控设备IP地址是否发生变化，若发生变化则同步将华为云上的DNS解析地址修改为新地址，并邮件通知。
 
-## ipChangeMonitoring主机IP监控
+## ipChangeMonitoring
 通过python脚本定时监控检查主机公网IP地址是否发生改变，若发生改变，则通过邮件方式发送通知。
 ### 使用方式
 ### 文件下载到本地目录下
