@@ -5,13 +5,13 @@ import pandas as pd
 import psycopg
 from sqlalchemy import create_engine
 
-filePath = os.path.abspath(r'D:\FunctionalTool\MyScripts\Python_CSV\File')
+filePath = os.path.abspath(r'D:\FunctionalTool\MyScripts\xlsx_csv_to_sql\File')
 
 # 新建列表存放每个文件数据
 newData = []
 
 # 获取目录下所有csv文件
-for dataInfo in os.listdir('D:\\FunctionalTool\\MyScripts\\Python_CSV\\File'):
+for dataInfo in os.listdir('D:\\FunctionalTool\\MyScripts\\xlsx_csv_to_sql\\File'):
     dataFile = os.path.join(filePath, dataInfo)
     print(dataFile)
     data = pd.read_csv(dataFile, encoding="gbk")
