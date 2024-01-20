@@ -84,15 +84,14 @@ def setIp(public_ip):
         resp = client.ModifyRecord(req)
         # 输出json格式的字符串回包
         # print(resp.to_json_string())
+        # 调用发送邮件函数
+        Content = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())+' ' + '\r'+'域名'+"pc.digiisle.com.cn"+'的DNS解析已更新。'+'\r'+'更新后的IP地址为：'+public_ip+'\r'+"接口返回信息："+'\r'+resp.to_json_string()
+        send_email(Content)
+        # 存储本次更新的ip用于比较
+        save_public_ip(public_ip)
 
     except TencentCloudSDKException as err:
         print(err)
-    # 调用发送邮件函数
-    Content = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())+' ' + '\r'+'域名'+"pc.digiisle.com.cn"+'的DNS解析已更新。'+'\r'+'更新后的IP地址为：'+public_ip+'\r'+"接口返回信息："+'\r'+resp.to_json_string()
-    send_email(Content)
-    # 存储本次更新的ip用于比较
-    save_public_ip(public_ip)
-
 
 def send_email(Content):
     """发送邮件"""
