@@ -38,7 +38,3 @@ for user_chunk in read_user_chunks(user_table_file, chunksize=chunksize):
 
 # 将处理后的数据写入输出文件
 pd.concat(output_chunks).to_csv(output_file, index=False, encoding='utf-8')
-
-
-
-
