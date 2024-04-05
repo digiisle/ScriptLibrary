@@ -8,35 +8,36 @@ import os
 4、最终输出新表，新表包含字段有，用户ID：teller_on，用户名：name，完整部门：full_stru，部门之间用/分割；
 """
 
-# 输入文件路径
-user_table_file = input("请输入用户表文件路径：")
+# 读取部门表并构建部门字典
 dept_table_file = input("请输入部门表文件路径：")
-
-# 读取用户表和部门表
-user_df = pd.read_csv(user_table_file)
 dept_df = pd.read_csv(dept_table_file)
-
-# 将部门表设置为字典，以便更快地查询
 dept_dict = dict(zip(dept_df['stru_id'], dept_df['stru_fname']))
 
 # 定义一个函数来递归查找完整部门名称
 def find_full_department(dept_id):
-    if pd.isnull(dept_id):
-        return ""
-    else:
-        return find_full_department(dept_df.loc[dept_df['stru_id'] == dept_id, 'sup_stru'].iloc[0]) + "/" + dept_dict[dept_id]
+    full_department = ""
+    while not pd.isnull(dept_id):
+        full_department = "/" + dept_dict[dept_id] + full_department
+        dept_id = dept_df.loc[dept_df['stru_id'] == dept_id, 'sup_stru'].iloc[0]
+    return full_department.lstrip("/")
 
-# 应用函数并创建新的完整部门列
-user_df['full_stru'] = user_df['branch_id'].apply(find_full_department)
+# 读取用户表的生成器
+def read_user_chunks(filename, chunksize=10000):
+    for chunk in pd.read_csv(filename, chunksize=chunksize):
+        yield chunk
 
-# 去除最后一个部门后的斜杠
-user_df['full_stru'] = user_df['full_stru'].str.rstrip('/')
-
-# 输出文件路径
+# 处理用户表数据
+user_table_file = input("请输入用户表文件路径：")
 output_file = input("请输入输出文件路径：")
+chunksize = 10000  # 每次处理10000行数据
+output_chunks = []
 
-# 输出到新表，指定编码为UTF-8
-user_df.to_csv(output_file, index=False, encoding='utf-8')
+for user_chunk in read_user_chunks(user_table_file, chunksize=chunksize):
+    user_chunk['full_stru'] = user_chunk['branch_id'].apply(find_full_department)
+    output_chunks.append(user_chunk)
+
+# 将处理后的数据写入输出文件
+pd.concat(output_chunks).to_csv(output_file, index=False, encoding='utf-8')
 
 
 
