@@ -1,0 +1,12 @@
+[package]
+name = "iptool"
+version = "0.1.0"
+edition = "2024"
+build = "build.rs"
+
+[dependencies]
+ipnetwork = "0.20"
+ctrlc = "3.4"
+
+[build-dependencies]
+winres = "0.1"
